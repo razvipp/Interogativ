@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            color: #333;
+        }
+        .question-box {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            text-align: left;
+        }
+        h2 {
+            text-align: center;
+            color: #555;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Grammar Quiz</h1>
+        
+        <div class="question-box" id="present-simple-box">
+            <h2>Present Simple</h2>
+            <p id="present-simple-question">Question will appear here</p>
+            <input type="text" id="present-simple-answer" placeholder="Type your answer here">
+            <button onclick="validateAnswer('Present Simple')">Validate</button>
+            <p id="present-simple-feedback"></p>
+        </div>
+
+        <div class="question-box" id="present-continuous-box">
+            <h2>Present Continuous</h2>
+            <p id="present-continuous-question">Question will appear here</p>
+            <input type="text" id="present-continuous-answer" placeholder="Type your answer here">
+            <button onclick="validateAnswer('Present Continuous')">Validate</button>
+            <p id="present-continuous-feedback"></p>
+        </div>
+
+        <div class="question-box" id="past-simple-box">
+            <h2>Past Simple</h2>
+            <p id="past-simple-question">Question will appear here</p>
+            <input type="text" id="past-simple-answer" placeholder="Type your answer here">
+            <button onclick="validateAnswer('Past Simple')">Validate</button>
+            <p id="past-simple-feedback"></p>
+        </div>
+    </div>
+
+    <script>
+const questions = {
+    "Present Simple": [
+        { ro: "Eu merg la școală?", en: "Do I go to school?" },
+        { ro: "Tu scrii o scrisoare?", en: "Do you write a letter?" },
+        { ro: "El citește o carte?", en: "Does he read a book?" },
+        { ro: "Noi mâncăm mere?", en: "Do we eat apples?" },
+        { ro: "Ei joacă fotbal?", en: "Do they play football?" },
+        { ro: "Maria cântă frumos?", en: "Does Maria sing beautifully?" },
+        { ro: "Voi învățați pentru test?", en: "Do you learn for the test?" },
+        { ro: "Eu beau apă?", en: "Do I drink water?" },
+        { ro: "Tu conduci o mașină?", en: "Do you drive a car?" },
+        { ro: "El studiază engleza?", en: "Does he study English?" },
+        { ro: "Noi lucrăm împreună?", en: "Do we work together?" },
+        { ro: "Ei vizitează muzeul?", en: "Do they visit the museum?" },
+        { ro: "Maria gătește cina?", en: "Does Maria cook dinner?" },
+        { ro: "Eu vorbesc la telefon?", en: "Do I speak on the phone?" },
+        { ro: "Tu înțelegi lecția?", en: "Do you understand the lesson?" },
+        { ro: "El dansează bine?", en: "Does he dance well?" },
+        { ro: "Noi desenăm animale?", en: "Do we draw animals?" },
+        { ro: "Ei construiesc o casă?", en: "Do they build a house?" },
+        { ro: "Maria face sport?", en: "Does Maria do sports?" },
+        { ro: "Eu ascult muzică?", en: "Do I listen to music?" },
+        { ro: "Tu repari bicicleta?", en: "Do you repair the bike?" },
+        { ro: "El pictează un tablou?", en: "Does he paint a picture?" },
+        { ro: "Noi alergăm dimineața?", en: "Do we run in the morning?" },
+        { ro: "Ei se joacă în curte?", en: "Do they play in the yard?" },
+        { ro: "Maria citește știrile?", en: "Does Maria read the news?" },
+    ],
+    "Present Continuous": [
+        { ro: "Eu scriu un email acum?", en: "Am I writing an email now?" },
+        { ro: "El citește o carte acum?", en: "Is he reading a book now?" },
+        { ro: "Noi ascultăm muzică acum?", en: "Are we listening to music now?" },
+        { ro: "Ei dansează acum?", en: "Are they dancing now?" },
+        { ro: "Maria învață engleză acum?", en: "Is Maria learning English now?" },
+        { ro: "Eu beau cafea acum?", en: "Am I drinking coffee now?" },
+        { ro: "Tu conduci acum?", en: "Are you driving now?" },
+        { ro: "Noi lucrăm la un proiect acum?", en: "Are we working on a project now?" },
+        { ro: "Ei joacă șah acum?", en: "Are they playing chess now?" },
+        { ro: "Maria gătește prânzul acum?", en: "Is Maria cooking lunch now?" },
+        { ro: "Eu mă uit la televizor acum?", en: "Am I watching TV now?" },
+        { ro: "Tu alergi în parc acum?", en: "Are you running in the park now?" },
+        { ro: "El repară mașina acum?", en: "Is he repairing the car now?" },
+        { ro: "Noi desenăm o hartă acum?", en: "Are we drawing a map now?" },
+        { ro: "Ei citesc ziarele acum?", en: "Are they reading the newspapers now?" },
+        { ro: "Maria cântă la pian acum?", en: "Is Maria playing the piano now?" },
+        { ro: "Eu scriu o poveste acum?", en: "Am I writing a story now?" },
+        { ro: "Tu studiezi pentru examen acum?", en: "Are you studying for the exam now?" },
+        { ro: "El plantează flori acum?", en: "Is he planting flowers now?" },
+        { ro: "Noi vizităm muzeul acum?", en: "Are we visiting the museum now?" },
+        { ro: "Ei pictează un tablou acum?", en: "Are they painting a picture now?" },
+        { ro: "Maria închiriază o mașină acum?", en: "Is Maria renting a car now?" },
+        { ro: "Eu privesc cerul acum?", en: "Am I looking at the sky now?" },
+        { ro: "Tu asculți muzică clasică acum?", en: "Are you listening to classical music now?" },
+        { ro: "El pregătește bagajul acum?", en: "Is he packing the luggage now?" },
+    ],
+    "Past Simple": [
+        { ro: "Eu am mâncat o pizza?", en: "Did I eat a pizza?" },
+        { ro: "El a mers la școală?", en: "Did he go to school?" },
+        { ro: "Noi am jucat fotbal?", en: "Did we play football?" },
+        { ro: "Maria a scris un email?", en: "Did Maria write an email?" },
+        { ro: "Ei au dansat la petrecere?", en: "Did they dance at the party?" },
+        { ro: "Eu am ascultat muzică?", en: "Did I listen to music?" },
+        { ro: "Tu ai cântat frumos?", en: "Did you sing beautifully?" },
+        { ro: "Noi am privit un film?", en: "Did we watch a movie?" },
+        { ro: "Ei au citit o carte?", en: "Did they read a book?" },
+        { ro: "Am studiat pentru test?", en: "Did I study for the test?" },
+        { ro: "El a cumpărat o bicicletă?", en: "Did he buy a bike?" },
+        { ro: "Maria a desenat un tablou?", en: "Did Maria paint a picture?" },
+        { ro: "Noi am vizitat muzeul?", en: "Did we visit the museum?" },
+        { ro: "Ei au dormit mult?", en: "Did they sleep a lot?" },
+        { ro: "Tu ai condus mașina?", en: "Did you drive the car?" },
+        { ro: "Eu am pierdut cheile?", en: "Did I lose the keys?" },
+        { ro: "El a învățat o lecție nouă?", en: "Did he learn a new lesson?" },
+        { ro: "Noi am vorbit cu profesorul?", en: "Did we talk to the teacher?" },
+        { ro: "Ei au alergat în parc?", en: "Did they run in the park?" },
+        { ro: "Eu am spălat vasele?", en: "Did I wash the dishes?" },
+        { ro: "Maria a închis ușa?", en: "Did Maria close the door?" },
+        { ro: "El a deschis o carte?", en: "Did he open a book?" },
+        { ro: "Noi am urcat pe munte?", en: "Did we climb the mountain?" },
+        { ro: "Ei au început jocul?", en: "Did they start the game?" },
+        { ro: "Am terminat tema?", en: "Did I finish the homework?" },
+    ]
+};
+
+
+
+        const currentIndex = {
+            "Present Simple": 0,
+            "Present Continuous": 0,
+            "Past Simple": 0,
+        };
+
+        function showQuestion(category) {
+            const question = questions[category][currentIndex[category]];
+            document.getElementById(`${category.toLowerCase().replace(" ", "-")}-question`).textContent = question.ro;
+            document.getElementById(`${category.toLowerCase().replace(" ", "-")}-answer`).value = "";
+            document.getElementById(`${category.toLowerCase().replace(" ", "-")}-feedback`).textContent = "";
+        }
+
+        function validateAnswer(category) {
+            const question = questions[category][currentIndex[category]];
+            const userAnswer = document.getElementById(`${category.toLowerCase().replace(" ", "-")}-answer`).value.trim().toLowerCase();
+            const correctAnswer = question.en.toLowerCase();
+            const feedbackElement = document.getElementById(`${category.toLowerCase().replace(" ", "-")}-feedback`);
+
+            if (userAnswer === correctAnswer) {
+                feedbackElement.textContent = "Correct! 🎉";
+                feedbackElement.style.color = "green";
+            } else {
+                feedbackElement.textContent = `Incorrect! The correct answer is: "${question.en}".`;
+                feedbackElement.style.color = "red";
+            }
+
+            setTimeout(() => {
+                currentIndex[category]++;
+                if (currentIndex[category] >= questions[category].length) {
+                    feedbackElement.textContent = "You have completed this category!";
+                    return;
+                }
+                showQuestion(category);
+            }, 2000);
+        }
+
+        // Initialize the questions
+        showQuestion("Present Simple");
+        showQuestion("Present Continuous");
+        showQuestion("Past Simple");
+    </script>
+</body>
+</html>
